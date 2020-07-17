@@ -1,0 +1,156 @@
+entity SMCabeceraOrden {
+	idCabeceraOrden Integer,
+	idProveedor Integer,
+	idCliente Integer,
+	fechaCom Instant,
+	telefonoConvencional String,
+	telefonoCelular String,
+	codProv String,
+	codCan String,
+	codParr String,
+	direccion String,
+	referencia String,
+	estado String,
+	fechaReg Instant
+}
+
+entity SMCalificacionOrden {
+	idCalificacion Integer,
+	idCabeceraOrden Integer,
+	calificacion String,
+	clienteProveedor String,
+	fechaCalif Instant,
+	observacion String,
+	fechaReg Instant
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity SMCatalogoProfServ {
+	idCatalogo Integer,
+	codOfiProf String,
+	descripcion String,
+	nivel String
+}
+
+entity SMCliente {
+	idCliente Integer,
+	cedula String,
+	nombres String,
+	apellidos String,
+	telefonoConvencional String,
+	telefonoCelular String,
+	codProv String,
+	codCan String,
+	codParr String,
+	direccion String,
+	referencia String,
+	latitud String,
+	longitud String,
+	estado String,
+	idUser Integer,
+	fechaRegistro Instant
+}
+
+/**
+ * Task entity.
+ * @author The JHipster team.
+ */
+entity SMDetalleComercializacion {
+	idDetalleCom Integer,
+	idCabeceraOrden Integer,
+	idProductoOferta Integer,
+	cantidad Integer,
+	precioServicio Double,
+	fechaRegistro Instant,
+	idUser Integer
+}
+
+/**
+ * The Employee entity.
+ */
+entity SMProductosOferta {
+	/**
+	* The firstname attribute.
+	*/
+	idPrductosOfer Integer,
+	idProveedor Integer,
+	codOfiProf String,
+	precioReferencia Double,
+	estado String,
+	fechaReg Instant
+}
+
+entity SMProveedor {
+	idProveedor Integer,
+	cedula String,
+	nombres String,
+	apellidos String,
+	rucRepresentante String,
+	nombreRepresentante String,
+	razonSocial String,
+	telefono String,
+	celular String,
+	direccion String,
+	referencia String,
+	latitud String,
+	longitud String,
+	codProv String,
+	codCan String,
+	codParr String,
+	fechaRegistro Instant,
+	idUser Integer,
+	estado String
+}
+
+entity SMSeguimientoServicio {
+	idSeguimientoServ Integer,
+	idCabeceraOrden Integer,
+	fechaSoliServ Instant,
+	fechaEjecServ Instant,
+	fechaCierreServ Instant,
+	observacion String,
+	fechaRegistro Instant,
+	idUser Integer
+}
+
+
+relationship OneToOne {
+	SMCalificacionOrden{idCabeceraOrden} to SMCabeceraOrden,
+    SMDetalleComercializacion{idCabeceraOrden} to SMCabeceraOrden
+}
+
+
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	SMDetalleComercializacion to SMProductosOferta{idProductoOferta},
+	/**
+	* A relationship
+	*/
+	SMSeguimientoServicio to
+	/**
+	* Another side of the same relationship
+	*/
+	SMCabeceraOrden{idCabeceraOrden}
+}
+
+relationship ManyToOne {
+	SMCabeceraOrden{idProveedor} to SMProveedor,
+    SMCabeceraOrden{idCliente} to SMCliente
+}
+
+
+
+// Set pagination options
+paginate SMProveedor, SMProductosOferta, SMCliente with infinite-scroll
+paginate SMCabeceraOrden, SMSeguimientoServicio, SMDetalleComercializacion, SMCalificacionOrden with pagination
+
+// Use Data Transfert Objects (DTO)
+// dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl
+
+// Set an angular suffix
+// angularSuffix * with mySuffix
